@@ -3,22 +3,22 @@
 var app = new Vue({
     el: '#app',
     data: {
-        comments: [
-            { title: 'Comment 1', upvotes: 5 },
-            { title: 'Comment 2', upvotes: 6 },
-            { title: 'Comment 3', upvotes: 1 },
-            { title: 'Comment 4', upvotes: 4 },
-            { title: 'Comment 5', upvotes: 3 }
+        candidates: [
+            // { title: 'candidate 1', upvotes: 5 },
+            // { title: 'candidate 2', upvotes: 6 },
+            // { title: 'candidate 3', upvotes: 1 },
+            // { title: 'candidate 4', upvotes: 4 },
+            // { title: 'candidate 5', upvotes: 3 }
         ],
         test: "Hello World",
-        newComment: "",
+        newcandidate: "",
     },
     created: function () {
         this.getall();
     },
     computed: {
-        sortedComments() {
-            return this.comments.sort((a, b) => {
+        sortedcandidates() {
+            return this.candidates.sort((a, b) => {
                 var rval = 0;
                 if (a.upvotes < b.upvotes) {
                     rval = 1;
@@ -31,25 +31,28 @@ var app = new Vue({
 
     },
     methods: {
-        addComment() {
-            var url = "http://cs.creatorof.jsearch.org:4201/comments";
+        addcandidate() {
+            var url = "http://cs.creatorof.jsearch.org:4200/candidates";
             axios.post(url, {
-                title: this.newComment,
+                title: this.newcandidate,
                 upvotes: 0
             })
                 .then(response => {
                     console.log("Post Response ");
                     console.log(response.data);
-                    this.comments.push(response.data);
+                    this.candidates.push(response.data);
                 })
                 .catch(e => {
                     console.log(e);
                 });
-            console.log(this.comments);
-            this.newComment = "";
+            console.log(this.candidates);
+            this.newcandidate = "";
+        },
+        vote() {
+            
         },
         incrementUpvotes(item) {
-            var url = "http://cs.creatorof.jsearch.org:4201/comments/" + item._id + "/upvote";
+            var url = "http://cs.creatorof.jsearch.org:4200/candidates/" + item._id + "/upvote";
             axios.put(url)
                 .then(response => {
                     console.log(response.data.upvotes);
@@ -62,11 +65,11 @@ var app = new Vue({
         },
         async getall() {
             console.log("get all");
-            var url = "http://cs.creatorof.jsearch.org:4201/comments"; // This is the route we set up in index.js
+            var url = "http://cs.creatorof.jsearch.org:4200/candidates"; // This is the route we set up in index.js
             try {
                 let response = await axios.get(url);
-                this.comments = response.data; // Assign array to returned response
-                console.log(this.comments);
+                this.candidates = response.data; // Assign array to returned response
+                console.log(this.candidates);
                 return true;
             }
             catch (error) {
